@@ -1,6 +1,6 @@
 ; author:Byt3h
 ; referer:《汇编语言》王爽第四版
-;这里并未验证是否正确
+;这里并未验证是否正确，这里编译时有很多错误，具体看编译错误
 
 assume cs:codesg
 
@@ -24,43 +24,42 @@ table segment
 table ends
 
 codesg segment
-	start:
-		mov ax,data
-		mov ds,ax
+start:
+	mov ax,data
+	mov ds,ax
 
-		mov ax,table
-		mov es, ax
+	mov ax,table
+	mov es, ax
 
-		mov bx,0
-		mov idata,0
-		mov si,0
-		;设置寻址方式的初始参数
-		
-		mov di,0
-		;设置寻址方式的初始参数
-		
-		mov cx,21
-		;设置循环次数
-	 
-	 ;这里并未验证是否正确
-	 s: mov es:[bx+idata+si],ds:[di*4]
-		mov idata,5
-		mov es:[bx+idata+si],ds:[56+di*8]
-		mov si,0
-		mov word ptr dx,es:[bx+idata+si]
-		mov si,2
-		mov word ptr ax,es:[bx+idata+si]
-		mov si,0
-		mov idata,A
-		mov es:[bx+idata+si],ds:[A8+di*4]
-		div word ptr es:[A]
-		add bx,10
-		inc di
-		loop s
-		
-		mov ax,4c00H
-		int 21H
+	mov bx,0
+	mov bp,0
+	mov si,0
+	;设置寻址方式的初始参数
+	
+	mov di,0
+	;设置寻址方式的初始参数
+	
+	mov cx,21
+	;设置循环次数
+ 
+ ;这里并未验证是否正确，这里的定义有点问题，有些地方
+ s: mov es:[bx+bp+si],ds:[di*4]
+	mov bp,05
+	mov es:[bx+bp+si],ds:[56+di*8]
+	mov si,00
+	mov word ptr dx,es:[bx+bp+si]
+	mov si,02
+	mov word ptr ax,es:[bx+bp+si]
+	mov si,00
+	mov bp,A
+	mov es:[bx++si+bp],ds:[A8+di*4]
+	div word ptr es:[A]
+	add bx,10
+	inc di
+	loop s
+	
+	mov ax,4c00H
+	int 21H
 
 codesg ends
-
 end start
