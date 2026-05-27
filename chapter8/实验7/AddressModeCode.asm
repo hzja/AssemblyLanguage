@@ -1,6 +1,6 @@
 ; author:Byt3h
 ; referer:《汇编语言》王爽第四版
-;这里并未验证是否正确，这里编译时有很多错误，具体看编译错误
+;参考AI给出的答案，基本没啥问题
 
 assume cs:codesg
 
@@ -31,31 +31,40 @@ start:
 	mov ax,table
 	mov es, ax
 
-	mov bx,0
-	mov bp,0
-	mov si,0
-	;设置寻址方式的初始参数
-	
-	mov di,0
-	;设置寻址方式的初始参数
-	
-	mov cx,21
-	;设置循环次数
+	mov bx,0	;行的基址
+	mov si,0	;年份和总收入的基址
+	mov di,0	;雇员的基址
+	mov cx,21	;设置循环次数
  
  ;这里并未验证是否正确，这里的定义有点问题，有些地方
- s: mov es:[bx+bp+si],ds:[di*4]
-	mov bp,05
-	mov es:[bx+bp+si],ds:[56+di*8]
-	mov si,00
-	mov word ptr dx,es:[bx+bp+si]
-	mov si,02
-	mov word ptr ax,es:[bx+bp+si]
-	mov si,00
-	mov bp,A
-	mov es:[bx++si+bp],ds:[A8+di*4]
-	div word ptr es:[A]
-	add bx,10
-	inc di
+ s: 
+	;复制年份
+	mov ax,ds:[si+0]
+	mov es:[bx+0],ax
+	mov ax,ds:[si+2]
+	mov es:[bx+2],ax
+	
+	;复制收入
+	mov ax,ds:[si+84]
+	mov es:[bx+5],ax
+	mov ax,ds:[si+86]
+	mov es:[bx+7],ax
+	
+	;复制雇员
+	mov ax,ds:[si+168]
+	mov es:[bx+0Ah],ax
+	
+	;求取人均收入
+	mov dx,es:[bx+7]
+	mov ax,es:[bx+5]
+	div word ptr es:[bx+0Ah]
+	mov es:[bx+0Dh],ax
+	
+	;改变基址，进入下一个循环
+	add bx,16
+	add si,4
+	add di,2
+	
 	loop s
 	
 	mov ax,4c00H
